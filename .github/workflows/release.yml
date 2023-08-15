@@ -3,13 +3,11 @@ on:
     # Sequence of patterns matched against refs/tags
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-
 name: Create Release
-
 jobs:
   build:
     name: Create Release
-    runs-on: self-hosted
+    runs-on: ci-server
     timeout-minutes: 720
     steps:
       - name: Checkout code
@@ -19,16 +17,16 @@ jobs:
         run: |
           echo "COMPILE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
           cd ~/work/runner-script/sdk4_script && ./build_firmware_by_source $GITHUB_REPOSITORY $GITHUB_WORKSPACE $GITHUB_REF $GITHUB_RUN_ID $GITHUB_ACTOR release
-
       - name: Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body_path: ~/work/_github/gl_release_note
+          body_path: /home/gl-ci/work/_github/gl_release_note
           prerelease: true
 
       - name: notify
         run: |
           echo "send notify"
           cd ~/work/runner-script/util && ./send_resease_notify $GITHUB_REPOSITORY $GITHUB_WORKSPACE $GITHUB_REF_NAME $GITHUB_RUN_ID $GITHUB_ACTOR release
+
