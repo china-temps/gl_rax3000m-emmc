@@ -1,27 +1,27 @@
-From fe3f1d92f5b7704d8847f7cd65e2b9dd29a06614 Mon Sep 17 00:00:00 2001
+From 2f97ccdabf70b682faaa9fa27aa2a61bb87664ff Mon Sep 17 00:00:00 2001
 From: AngelaCooljx <cool@gayhub.eu.org>
-Date: Sat, 12 Aug 2023 12:51:59 +0800
+Date: Sat, 26 Aug 2023 16:57:58 +0800
 Subject: [PATCH] Add support for CMCC RAX3000M-EMMC
 
 ---
- .../mediatek/mt7981-cmcc-rax3000m-emmc.dts    | 185 ++++++++++++++++++
- target/linux/mediatek/image/mt7981.mk         |  11 ++
+ .../mediatek/mt7981-cmcc-rax3000m-emmc.dts    | 202 ++++++++++++++++++
+ target/linux/mediatek/image/mt7981.mk         |  11 +
  .../mt7981/base-files/etc/board.d/01_leds     |   5 +
  .../mt7981/base-files/etc/board.d/02_network  |  18 ++
- 4 files changed, 219 insertions(+)
+ 4 files changed, 236 insertions(+)
  create mode 100644 target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m-emmc.dts
 
 diff --git a/target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m-emmc.dts b/target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m-emmc.dts
 new file mode 100644
-index 0000000000..4f4d1b4d05
+index 0000000000..6ad7293ce1
 --- /dev/null
 +++ b/target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7981-cmcc-rax3000m-emmc.dts
-@@ -0,0 +1,185 @@
+@@ -0,0 +1,202 @@
 +/dts-v1/;
 +#include "mt7981.dtsi"
 +
 +/ {
-+	model = "CMCC RAX3000M-EMMC";
++	model = "CMCC RAX3000M EMMC";
 +	compatible = "cmcc,rax3000m-emmc", "mediatek,mt7981";
 +
 +	chosen {
@@ -37,6 +37,23 @@ index 0000000000..4f4d1b4d05
 +		regulator-max-microvolt = <3300000>;
 +		regulator-boot-on;
 +		regulator-always-on;
++	};
++
++	gl-hw {
++		compatible = "gl-hw-info";
++		model = "mt2500";
++		wan = "eth1";
++		lan = "eth0";
++		usb-port = "1-1";
++		flash_size = <65536>;
++		temperature = "/sys/devices/virtual/thermal/thermal_zone0/temp";
++		factory_data {
++			device_mac = "/dev/mmcblk0p9", "0x0a";
++			device_ddns = "/dev/mmcblk0p9", "0x10";
++			device_sn_bak = "/dev/mmcblk0p9", "0x20";
++			device_sn = "/dev/mmcblk0p9", "0x30";
++			country_code = "/dev/mmcblk0p9", "0x88";
++		};
 +	};
 +
 +	gpio-keys {
@@ -203,7 +220,7 @@ index 0000000000..4f4d1b4d05
 +	status = "okay";
 +};
 diff --git a/target/linux/mediatek/image/mt7981.mk b/target/linux/mediatek/image/mt7981.mk
-index b7f1f6d437..6dbb0914a7 100755
+index b7f1f6d437..3c690adb53 100755
 --- a/target/linux/mediatek/image/mt7981.mk
 +++ b/target/linux/mediatek/image/mt7981.mk
 @@ -222,3 +222,14 @@ define Device/glinet_gl-mt2500
