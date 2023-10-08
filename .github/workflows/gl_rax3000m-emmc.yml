@@ -128,7 +128,6 @@ jobs:
           python3 setup.py -c configs/config-mt798x-7.6.6.1.yml
           cd mt7981/
           cp ./glinet4.x/pkg_config/gl_pkg_config_mt3000.mk  ./glinet4.x/mt7981/gl_pkg_config.mk
-          cp ./glinet4.x/pkg_config/glinet_depends_mt3000.yml  ./profiles/glinet_depends.yml
 
       - name: Run custom-script-1
         run: |
@@ -139,7 +138,7 @@ jobs:
       - name: Download packages
         id: download-packages
         run:
-          cd openwrt/mt7981 && ./scripts/gen_config.py glinet_depends
+          cd openwrt/mt7981 && ./scripts/gen_config.py target_mt7981_rax3000m-emmc.yml glinet_depends
           
       - name: Load custom configuration
         run: |
